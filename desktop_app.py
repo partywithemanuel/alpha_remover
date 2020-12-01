@@ -1,40 +1,61 @@
 import wx
-import operator
+import matplotlib.pyplot as plt
+import os
+import sys
+from PIL import Image
 
-# We make a class for frame, so that each time we create a new frame,
-# we can simply create a new object for it
+directory = "/Users/emanuel/Downloads/Archive" # root - tu promijeni path u root folder gdje su ti slike
 
-class WordPlay(wx.Frame):
-    def __init__(self, parent, title):
-        super(WordPlay, self).__init__(parent, title=title)
-        self.widgets()
-        self.Show()
+class Mywin(wx.Frame): 
+    def __init__(self, parent, title): 
+      super(Mywin, self).__init__(parent, title = title,size = (200,150))  
+      panel = wx.Panel(self) 
+      vbox = wx.BoxSizer(wx.VERTICAL) 
+      
+      #textbox
+      hbox1 = wx.BoxSizer(wx.HORIZONTAL) 
+      l1 = wx.StaticText(panel, -1, "Folder path") 
+		
+      hbox1.Add(l1, 1, wx.EXPAND|wx.ALIGN_LEFT|wx.ALL,5) 
+      self.t1 = wx.TextCtrl(panel) 
+		
+      hbox1.Add(self.t1,1,wx.EXPAND|wx.ALIGN_LEFT|wx.ALL,5) 
+      self.t1.Bind(wx.EVT_TEXT,self.OnKeyTyped) 
+      vbox.Add(hbox1) 
 
-    # Declare a function to add new buttons, icons, etc. to our app
-    def widgets(self):
-        text_box = wx.BoxSizer(wx.VERTICAL)
+      #button
+      self.btn = wx.Button(panel,-1,"Remove Alpha channel") 
+      vbox.Add(self.btn,0,wx.ALIGN_CENTER) 
+      self.btn.Bind(wx.EVT_BUTTON,self.OnClicked)
 
-        self.textbox = wx.TextCtrl(self, style=wx.TE_LEFT)
-        text_box.Add(self.textbox, flag=wx.EXPAND | wx.TOP | wx.BOTTOM, border=5)
 
-        grid = wx.GridSizer(0, 0, 0) # Values have changed to make adjustments to button positions
-        button_list = ['Run'] # List of button labels
+      #output
+      log = wx.TextCtrl(panel, size=(300,100))
+      sys.stdout=log
 
-        for lab in button_list:
-            button = wx.Button(self, -1, lab) # Initialise a button object
-            grid.Add(button, 0, wx.EXPAND) # Add a new button to the grid with the label from button_list
+  
+      hbox = wx.BoxSizer(wx.HORIZONTAL) 
+      vbox.Add(hbox,1,wx.ALIGN_CENTER) 
+      panel.SetSizer(vbox) 
+        
+      self.Centre() 
+      self.Show() 
+      self.Fit()
 
-        text_box.Add(grid, proportion=2, flag=wx.EXPAND)
+    def OnKeyTyped(self, event):
+        directory=event.GetString()
 
-        self.SetSizer(text_box)
+    def OnClicked(self, event):
+        btn = event.GetEventObject().GetLabel() 
+        print("Label of pressed button = ",btn )
+        program(directory)
 
-def event_handler(self, event):
-    # Get label of the button clicked
-    btn_label = event.GetEventObject().GetLabel()
-
-    # Get the text entered by user
-    path = self.textbox.GetValue()
-
+def remove_alpha(image,):
+    color=(255, 255, 255)
+    image.load()  # treba za split()
+    background = Image.new('RGB', image.size, color)
+    background.paste(image, mask=image.split()[3])  # 3 je alpha channel
+    return background
 
 def program(path):
     for subdir, dirs, files in os.walk(directory):
@@ -47,16 +68,6 @@ def program(path):
                     pic.save(os.path.join(subdir, filename))
                     print(os.path.join(subdir, filename))  
 
-def remove_alpha(image,):
-    color=(255, 255, 255)
-    image.load()  # treba za split()
-    background = Image.new('RGB', image.size, color)
-    background.paste(image, mask=image.split()[3])  # 3 je alpha channel
-    return background
-
-def main():
-    myapp = wx.App()
-    WordPlay(None, title='Word Play')
-    myapp.MainLoop()
-
-main()
+app = wx.App(redirect=True) 
+Mywin(None,  'PNG Alpha remover') 
+app.MainLoop()
