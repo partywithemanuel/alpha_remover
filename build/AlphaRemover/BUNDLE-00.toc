@@ -1,0 +1,3 @@
+([('AlphaRemover',
+   '/Users/emanuel/Documents/Emanuel/alpha_remover/dist/AlphaRemover',
+   'EXECUTABLE')],)
