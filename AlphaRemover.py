@@ -2,7 +2,7 @@ import wx
 import matplotlib.pyplot as plt
 import os
 import sys
-from subprocess import Popen, PIPE
+import subprocess
 from PIL import Image
 
 #/Users/emanuel/Downloads/Archive
