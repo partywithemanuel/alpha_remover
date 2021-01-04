@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import os
 from PIL import Image
 
-directory = "/Users/emanuel/Downloads/nutriu_10.12" # root - tu promijeni path u root folder gdje su ti slike
+directory = "/Users/emanuel/Downloads/No alpha" # root - tu promijeni path u root folder gdje su ti slike
 
 def remove_alpha(image,):
     color=(255, 255, 255)
