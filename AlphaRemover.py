@@ -5,7 +5,6 @@ import sys
 import subprocess
 from PIL import Image
 
-#/Users/emanuel/Downloads/Archive
 class App(wx.Frame): 
     def __init__(self, parent, title): 
       super(App, self).__init__(parent, title = title,size = (640,300))  
@@ -29,6 +28,7 @@ class App(wx.Frame):
       button_open = wx.Button(panel, label="Choose folder", size=(140, 24))
       button_open.Bind(wx.EVT_BUTTON, self.onDir)
       sizer.Add(button_open, pos=(1, 4), flag=wx.ALIGN_RIGHT|wx.RIGHT, border=10)
+
       
 
       #button execute
@@ -60,7 +60,7 @@ class App(wx.Frame):
     def onDir(self, event):
         dlg = wx.DirDialog(self, "Choose a directory:", style=wx.DD_DEFAULT_STYLE | wx.DD_DIR_MUST_EXIST)
         if dlg.ShowModal() == wx.ID_OK:
-            print ("You chose %s" % dlg.GetPath())
+            print ("Selected folder is %s" % dlg.GetPath())
             self.path = dlg.GetPath()
 
 
