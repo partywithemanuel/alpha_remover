@@ -10,7 +10,7 @@ class App(wx.Frame):
     def __init__(self, parent, title): 
       super(App, self).__init__(parent, title = title,size = (640,300))  
       panel = wx.Panel(self)
-      sizer = wx.GridBagSizer(4, 4)
+      sizer = wx.GridBagSizer(5, 4)
       
       #description
       text = wx.StaticText(panel, label="Folder path")
@@ -18,16 +18,23 @@ class App(wx.Frame):
       
       #input field
       self.path = wx.TextCtrl(panel)
-      sizer.Add(self.path, pos=(1, 0), span=(1, 5), flag=wx.EXPAND|wx.LEFT|wx.RIGHT, border=10)
+      sizer.Add(self.path, pos=(1, 0), span=(1, 4), flag=wx.EXPAND|wx.LEFT|wx.RIGHT, border=10)
       self.path.Bind(wx.EVT_TEXT,self.OnKeyTyped)
 
       #hint
       text2 = wx.StaticText(panel, style = wx.TE_MULTILINE, label="  Hint: hold Option after right-click on folder to show option to copy its path.")
       sizer.Add(text2, pos=(2, 0), span=(1, 3), flag=wx.BOTTOM|wx.TOP|wx.LEFT, border=5)
-      #button
-      button = wx.Button(panel, label="Remove Alpha", size=(140, 28))
-      self.Bind(wx.EVT_BUTTON, self.OnClicked, button)
-      sizer.Add(button, pos=(2, 3), flag=wx.ALIGN_RIGHT|wx.RIGHT|wx.BOTTOM, border=10)
+
+      #button open folder
+      button_open = wx.Button(panel, label="Choose folder", size=(140, 24))
+      button_open.Bind(wx.EVT_BUTTON, self.onDir)
+      sizer.Add(button_open, pos=(1, 4), flag=wx.ALIGN_RIGHT|wx.RIGHT, border=10)
+      
+
+      #button execute
+      button_execute = wx.Button(panel, label="Remove Alpha", size=(140, 24))
+      self.Bind(wx.EVT_BUTTON, self.OnClickedExecute, button_execute)
+      sizer.Add(button_execute, pos=(2, 4), flag=wx.ALIGN_RIGHT|wx.RIGHT|wx.BOTTOM, border=10)
 
       #output
       line = wx.TextCtrl(panel, wx.ID_ANY,style = wx.TE_MULTILINE|wx.TE_READONLY|wx.HSCROLL|wx.TE_RICH2)
@@ -41,10 +48,21 @@ class App(wx.Frame):
     def OnKeyTyped(self, event):
         self.path = event.GetString()
 
-    def OnClicked(self, event):
-        button = event.GetEventObject().GetLabel()
-        #print("You pressed the button!")
+    def OnClickedExecute(self, event):
+        button_execute = event.GetEventObject().GetLabel()
         program(self.path)
+
+    def OnClickedOpen(self, event):
+        button_open = event.GetEventObject().GetLabel()
+        onDir(self.path)
+    
+    #open folder modal
+    def onDir(self, event):
+        dlg = wx.DirDialog(self, "Choose a directory:", style=wx.DD_DEFAULT_STYLE | wx.DD_DIR_MUST_EXIST)
+        if dlg.ShowModal() == wx.ID_OK:
+            print ("You chose %s" % dlg.GetPath())
+            self.path = dlg.GetPath()
+
 
 
 def remove_alpha(image):
