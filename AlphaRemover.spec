@@ -30,8 +30,4 @@ exe = EXE(pyz,
           upx=True,
           upx_exclude=[],
           runtime_tmpdir=None,
-          console=False , icon='icon.icns')
-app = BUNDLE(exe,
-             name='AlphaRemover.app',
-             icon='icon.icns',
-             bundle_identifier=None)
+          console=True , icon='icon.icns')
