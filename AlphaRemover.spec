@@ -3,7 +3,7 @@
 block_cipher = None
 
 
-a = Analysis(['AlphaRemover.py'],
+a = Analysis(['/Users/emanuel/Documents/Emanuel/alpha_remover/AlphaRemover.py'],
              pathex=['/Users/emanuel/Documents/Emanuel/alpha_remover'],
              binaries=[],
              datas=[],
@@ -30,4 +30,8 @@ exe = EXE(pyz,
           upx=True,
           upx_exclude=[],
           runtime_tmpdir=None,
-          console=True , icon='icon.icns')
+          console=False , icon='icon.icns')
+app = BUNDLE(exe,
+             name='AlphaRemover.app',
+             icon='icon.icns',
+             bundle_identifier=None)
